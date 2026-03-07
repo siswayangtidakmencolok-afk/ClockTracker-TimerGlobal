@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { View, Text, TextInput, StyleSheet } from "react-native";
 import moment from "moment-timezone";
+import { useState } from "react";
+import { StyleSheet, Text, TextInput, View } from "react-native";
 
 export default function WorldClock(){
 
@@ -12,11 +12,11 @@ return(
 
 <View style={styles.container}>
 
-<Text style={styles.title}>World Clock</Text>
+<Text style={styles.title}>World CLock</Text>
 
 <TextInput
 style={styles.input}
-placeholder="Asia/Tokyo"
+placeholder="Asia/Jakarta"
 onChangeText={setCity}
 />
 
@@ -32,7 +32,8 @@ const styles = StyleSheet.create({
 
 container:{
 flex:1,
-justifyContent:"center",
+paddingTop:80,
+justifyContent:"flex-start",
 alignItems:"center"
 },
 

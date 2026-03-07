@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { View, Text, TextInput, StyleSheet } from "react-native";
 import moment from "moment-timezone";
+import { useState } from "react";
+import { StyleSheet, Text, TextInput, View } from "react-native";
 
 export default function WorldClock(){
 
@@ -29,8 +29,19 @@ const styles = StyleSheet.create({
 
 container:{
 flex:1,
+paddingTop:80,
 justifyContent:"center",
 alignItems:"center"
+},
+
+search: {
+  width: "85%",
+  padding: 15,
+  borderRadius: 20,
+  borderWidth: 2,
+  borderColor: "#FFD580",
+  backgroundColor: "#0b0b0b",
+  color: "white",
 },
 
 title:{

@@ -1,17 +1,15 @@
 import * as Notifications from "expo-notifications";
 
-export async function scheduleAlarm(seconds: number) {
+export async function setAlarm(seconds: number) {
 
   await Notifications.scheduleNotificationAsync({
     content: {
       title: "Alarm",
-      body: "Waktu yang kamu set sudah tiba"
+      body: "Waktu kamu sudah habis ⏰",
     },
     trigger: {
-      type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
       seconds: seconds,
-      repeats: false
-    }
+    } as Notifications.TimeIntervalTriggerInput,
   });
 
 }

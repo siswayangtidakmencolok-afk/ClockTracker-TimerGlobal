@@ -30,9 +30,9 @@ setTime(new Date())
 return ()=>clearInterval(timer)
 },[])
 
-const filtered = cities.filter(c =>
-c.city.toLowerCase().includes(search.toLowerCase())
-)
+const filteredCities = cities.filter(c =>
+  c.city.toLowerCase().includes(search.toLowerCase())
+);
 
 return(
 
@@ -51,7 +51,7 @@ onChangeText={setSearch}
 />
 
 <FlatList
-data={filtered}
+data={filteredCities}
 keyExtractor={(item)=>item.city}
 renderItem={({item})=>(
 
