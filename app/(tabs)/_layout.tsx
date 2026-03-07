@@ -1,0 +1,23 @@
+import { Tabs } from 'expo-router';
+
+export default function TabLayout() {
+  return (
+    <Tabs>
+
+      <Tabs.Screen
+        name="index"
+        options={{
+          title: "Stopwatch",
+        }}
+      />
+
+      <Tabs.Screen
+        name="explore"
+        options={{
+          title: "World Clock",
+        }}
+      />
+
+    </Tabs>
+  );
+}
