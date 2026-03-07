@@ -1,54 +1,66 @@
 import moment from "moment-timezone";
 import { useState } from "react";
 import { FlatList, StyleSheet, Text, TextInput, View } from "react-native";
+import SkyBackground from "../../components/SkyBackground";
 
 export default function WorldClock() {
 
-const [search,setSearch] = useState("");
+  const [search,setSearch] = useState("");
 
-const cities = [
-{city:"Jakarta",tz:"Asia/Jakarta"},
-{city:"Tokyo",tz:"Asia/Tokyo"},
-{city:"London",tz:"Europe/London"},
-{city:"New York",tz:"America/New_York"},
-{city:"Seoul",tz:"Asia/Seoul"},
-{city:"Bangkok",tz:"Asia/Bangkok"}
-];
+  const cities = [
+    {city:"Jakarta",tz:"Asia/Jakarta"},
+    {city:"Tokyo",tz:"Asia/Tokyo"},
+    {city:"London",tz:"Europe/London"},
+    {city:"New York",tz:"America/New_York"},
+    {city:"Seoul",tz:"Asia/Seoul"},
+    {city:"Bangkok",tz:"Asia/Bangkok"}
+  ];
 
-const filtered = cities.filter(c =>
-c.city.toLowerCase().includes(search.toLowerCase())
-);
+  const filtered = cities.filter(c =>
+    c.city.toLowerCase().includes(search.toLowerCase())
+  );
 
-return(
+  return (
 
-<View style={styles.container}>
+  <View style={{flex:1}}>
 
-<Text style={styles.title}>World Time</Text>
+    <SkyBackground type="morning"/>
 
-<TextInput
-placeholder="Search city..."
-placeholderTextColor="#aaa"
-style={styles.search}
-value={search}
-onChangeText={setSearch}
-/>
+    <View style={styles.container}>
 
-<FlatList
-data={filtered}
-keyExtractor={(item,index)=>index.toString()}
-renderItem={({item})=>(
-<View style={styles.card}>
-<Text style={styles.city}>{item.city}</Text>
-<Text style={styles.time}>
-{moment().tz(item.tz).format("HH:mm:ss")}
-</Text>
-</View>
-)}
-/>
+      <Text style={styles.title}>World Time</Text>
 
-</View>
+      <TextInput
+        placeholder="Search city..."
+        placeholderTextColor="#aaa"
+        style={styles.search}
+        value={search}
+        onChangeText={setSearch}
+      />
 
-)
+      <FlatList
+        data={filtered}
+        keyExtractor={(item,index)=>index.toString()}
+        renderItem={({item}) => (
+
+          <View style={styles.card}>
+
+            <Text style={styles.city}>{item.city}</Text>
+
+            <Text style={styles.time}>
+              {moment().tz(item.tz).format("HH:mm:ss")}
+            </Text>
+
+          </View>
+
+        )}
+      />
+
+    </View>
+
+  </View>
+
+  );
 
 }
 
@@ -58,7 +70,6 @@ container:{
 flex:1,
 alignItems:"center",
 paddingTop:80,
-backgroundColor:"#134e4a"
 },
 
 title:{
@@ -96,4 +107,4 @@ color:"#22c55e",
 fontSize:20
 }
 
-})
+});

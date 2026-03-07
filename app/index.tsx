@@ -1,56 +1,60 @@
 import moment from "moment-timezone";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
 
-export default function WorldClock(){
+export default function WorldClock() {
 
-const [city,setCity] = useState("Asia/Jakarta")
+  const [city, setCity] = useState("Asia/Jakarta");
+  const [time, setTime] = useState(moment().tz("Asia/Jakarta").format("HH:mm:ss"));
 
-const time = moment().tz(city).format("HH:mm:ss")
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTime(moment().tz(city).format("HH:mm:ss"));
+    }, 1000);
 
-return(
+    return () => clearInterval(interval);
+  }, [city]);
 
-<View style={styles.container}>
+  return (
+    <View style={styles.container}>
 
-<Text style={styles.title}>World CLock</Text>
+      <Text style={styles.title}>World Clock</Text>
 
-<TextInput
-style={styles.input}
-placeholder="Asia/Jakarta"
-onChangeText={setCity}
-/>
+      <TextInput
+        style={styles.input}
+        placeholder="Asia/Jakarta"
+        onChangeText={setCity}
+      />
 
-<Text style={styles.time}>{time}</Text>
+      <Text style={styles.time}>{time}</Text>
 
-</View>
-
-)
-
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
 
-container:{
-flex:1,
-paddingTop:80,
-justifyContent:"flex-start",
-alignItems:"center"
-},
+  container: {
+    flex: 1,
+    paddingTop: 80,
+    justifyContent: "flex-start",
+    alignItems: "center"
+  },
 
-title:{
-fontSize:26,
-marginBottom:20
-},
+  title: {
+    fontSize: 26,
+    marginBottom: 20
+  },
 
-input:{
-borderWidth:1,
-padding:10,
-width:200,
-marginBottom:20
-},
+  input: {
+    borderWidth: 1,
+    padding: 10,
+    width: 200,
+    marginBottom: 20
+  },
 
-time:{
-fontSize:40
-}
+  time: {
+    fontSize: 40
+  }
 
-})
+});
