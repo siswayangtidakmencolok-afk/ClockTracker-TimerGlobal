@@ -1,74 +1,129 @@
-import { useState, useRef } from "react";
-import { View, Text, Button, StyleSheet } from "react-native";
+import moment from "moment-timezone";
+import { useEffect, useState } from "react";
+import { FlatList, StyleSheet, Text, TextInput, View } from "react-native";
 
-export default function Stopwatch(){
+const cities = [
+{ city:"Jakarta", tz:"Asia/Jakarta"},
+{ city:"Tokyo", tz:"Asia/Tokyo"},
+{ city:"London", tz:"Europe/London"},
+{ city:"New York", tz:"America/New_York"},
+{ city:"Paris", tz:"Europe/Paris"},
+{ city:"Dubai", tz:"Asia/Dubai"},
+{ city:"Sydney", tz:"Australia/Sydney"},
+{ city:"Singapore", tz:"Asia/Singapore"},
+{ city:"Berlin", tz:"Europe/Berlin"},
+{ city:"Moscow", tz:"Europe/Moscow"},
+{ city:"Toronto", tz:"America/Toronto"},
+{ city:"Los Angeles", tz:"America/Los_Angeles"},
+{ city:"seoul", tz:"Asia/Seoul"},
+{ city:"Bangkok", tz:"Asia/Bangkok"},
+{ city:"Hong Kong", tz:"Asia/Hong_Kong"},
+{ city:"Rome", tz:"Europe/Rome"},
+{ city:"Istanbul", tz:"Europe/Istanbul"},
+{ city:"Mexico City", tz:"America/Mexico_City"},
+{ city:"Mumbai", tz:"Asia/Kolkata"},
+{ city:"Kuala Lumpur", tz:"Asia/Kuala_Lumpur"},
+{ city:"Spain", tz:"Europe/Madrid"},
+{ city:"Amsterdam", tz:"Europe/Amsterdam"},
+];
 
-const [time,setTime] = useState(0)
-const [running,setRunning] = useState(false)
+export default function HomeScreen(){
 
-const intervalRef = useRef<any>(null)
+const [search,setSearch] = useState("")
+const [time,setTime] = useState(new Date())
 
-const start = () =>{
-
-if(!running){
-
-setRunning(true)
-
-intervalRef.current = setInterval(()=>{
-setTime(prev=>prev+1)
+useEffect(()=>{
+const timer = setInterval(()=>{
+setTime(new Date())
 },1000)
 
-}
+return ()=>clearInterval(timer)
+},[])
 
-}
-
-const stop = ()=>{
-clearInterval(intervalRef.current)
-setRunning(false)
-}
-
-const reset = ()=>{
-stop()
-setTime(0)
-}
-
-const formatTime = ()=>{
-
-const hrs = Math.floor(time/3600)
-const mins = Math.floor((time%3600)/60)
-const secs = time%60
-
-return `${hrs}:${mins}:${secs}`
-
-}
+const filtered = cities.filter(c =>
+c.city.toLowerCase().includes(search.toLowerCase())
+)
 
 return(
 
 <View style={styles.container}>
 
-<Text style={styles.timer}>{formatTime()}</Text>
+<Text style={styles.title}>
+🌍 World Time Explorer
+</Text>
 
-<Button title="Start" onPress={start}/>
-<Button title="Stop" onPress={stop}/>
-<Button title="Reset" onPress={reset}/>
+<TextInput
+placeholder="Cari kota..."
+placeholderTextColor="#aaa"
+style={styles.search}
+value={search}
+onChangeText={setSearch}
+/>
+
+<FlatList
+data={filtered}
+keyExtractor={(item)=>item.city}
+renderItem={({item})=>(
+
+<View style={styles.card}>
+
+<Text style={styles.city}>
+{item.city}
+</Text>
+
+<Text style={styles.time}>
+{moment().tz(item.tz).format("HH:mm:ss")}
+</Text>
+
+</View>
+
+)}
+/>
 
 </View>
 
 )
-
 }
 
 const styles = StyleSheet.create({
 
 container:{
 flex:1,
-justifyContent:"center",
-alignItems:"center"
+backgroundColor:"#0f172a",
+padding:20
 },
 
-timer:{
-fontSize:40,
+title:{
+fontSize:28,
+fontWeight:"bold",
+color:"white",
 marginBottom:20
+},
+
+search:{
+backgroundColor:"#1e293b",
+color:"white",
+padding:12,
+borderRadius:10,
+marginBottom:15
+},
+
+card:{
+backgroundColor:"#1e293b",
+padding:20,
+borderRadius:12,
+marginBottom:10
+},
+
+city:{
+color:"#94a3b8",
+fontSize:16
+},
+
+time:{
+color:"#22c55e",
+fontSize:24,
+fontWeight:"bold"
 }
 
 })
