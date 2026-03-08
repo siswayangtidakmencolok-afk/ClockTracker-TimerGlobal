@@ -1,141 +1,123 @@
-import { Ionicons } from "@expo/vector-icons";
 import moment from "moment-timezone";
-import { useEffect, useRef, useState } from "react";
-import {
-  Animated,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
-import Globe3D from "../components/Globe3D";
+import { useEffect, useState } from "react";
+import { Pressable, StyleSheet, Text, View } from "react-native";
+import SkyBackground from "../components/SkyBackground";
+
+type CityKey =
+  | "Jakarta"
+  | "Tokyo"
+  | "London"
+  | "New York"
+  | "Sydney";
+
+const cities: Record<CityKey, string> = {
+  Jakarta: "Asia/Jakarta",
+  Tokyo: "Asia/Tokyo",
+  London: "Europe/London",
+  "New York": "America/New_York",
+  Sydney: "Australia/Sydney",
+};
 
 export default function WorldClock() {
 
-  const [city, setCity] = useState("Asia/Jakarta");
-  const [time, setTime] = useState(moment().tz("Asia/Jakarta").format("HH:mm:ss"));
-
-  const cloudX = useRef(new Animated.Value(-200)).current;
+  const [city, setCity] = useState<CityKey>("Jakarta");
+  const [time, setTime] = useState("");
 
   useEffect(() => {
 
-  const interval = setInterval(() => {
+    const interval = setInterval(() => {
 
-    const zone = moment.tz.zone(city)
+      const tz = cities[city];
+      const t = moment().tz(tz).format("HH:mm:ss");
 
-    if (zone) {
-      setTime(moment().tz(city).format("HH:mm:ss"))
-    } else {
-      setTime("Invalid Timezone")
-    }
+      setTime(t);
 
-  }, 1000)
-
-  return () => clearInterval(interval)
-
-    Animated.loop(
-      Animated.timing(cloudX, {
-        toValue: 400,
-        duration: 20000,
-        useNativeDriver: true,
-      })
-    ).start();
+    }, 1000);
 
     return () => clearInterval(interval);
 
   }, [city]);
 
-  const hour = moment().tz(city).hour();
-
-  const getSkyColor = () => {
-
-    if (hour >= 5 && hour < 11) return "#87CEEB"; // morning
-    if (hour >= 11 && hour < 17) return "#4FC3F7"; // day
-    if (hour >= 17 && hour < 19) return "#FF8A65"; // sunset
-    return "#0D1B2A"; // night
-
-  };
-
-  const getIcon = () => {
-
-    if (hour >= 6 && hour < 18) return "sunny";
-    return "moon";
-
-  };
+  const hour = moment().tz(cities[city]).hour();
 
   return (
 
-    <View style={[styles.container, { backgroundColor: getSkyColor() }]}>
+    <SkyBackground hour={hour}>
 
-      <Text style={styles.title}>World Clock</Text>
+      <View style={styles.container}>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Asia/Jakarta"
-        placeholderTextColor="#ccc"
-        onChangeText={setCity}
-      />
+        <Text style={styles.title}>🌍 World Clock</Text>
 
-      <Ionicons
-        name={getIcon()}
-        size={100}
-        color="white"
-        style={{ marginBottom: 20 }}
-      />
+        <Text style={styles.city}>{city}</Text>
 
-      <Text style={styles.time}>{time}</Text>
+        <Text style={styles.time}>{time}</Text>
 
-      <Animated.Text
-        style={{
-          position: "absolute",
-          top: 120,
-          transform: [{ translateX: cloudX }],
-          fontSize: 60,
-        }}
-      >
-        ☁️
-      </Animated.Text>
+        <View style={styles.buttons}>
 
-      <View style={{ marginTop: 40 }}>
-        <Globe3D />
+          {(Object.keys(cities) as CityKey[]).map((c) => (
+
+            <Pressable
+              key={c}
+              style={styles.button}
+              onPress={() => setCity(c)}
+            >
+              <Text style={styles.buttonText}>{c}</Text>
+            </Pressable>
+
+          ))}
+
+        </View>
+
       </View>
 
-    </View>
+    </SkyBackground>
 
   );
+
 }
 
 const styles = StyleSheet.create({
 
-  container: {
-    flex: 1,
-    paddingTop: 80,
-    alignItems: "center",
+  container:{
+    flex:1,
+    alignItems:"center",
+    justifyContent:"center"
   },
 
-  title: {
-    fontSize: 32,
-    color: "white",
-    marginBottom: 20,
-    fontWeight: "bold",
+  title:{
+    fontSize:32,
+    color:"white",
+    fontWeight:"bold",
+    marginBottom:10
   },
 
-  input: {
-    borderWidth: 1,
-    borderColor: "white",
-    padding: 10,
-    width: 220,
-    borderRadius: 10,
-    marginBottom: 20,
-    color: "white",
-    textAlign: "center",
+  city:{
+    fontSize:24,
+    color:"white"
   },
 
-  time: {
-    fontSize: 64,
-    fontWeight: "bold",
-    color: "white",
-    letterSpacing: 4,
+  time:{
+    fontSize:70,
+    color:"white",
+    fontWeight:"bold",
+    marginVertical:20
   },
+
+  buttons:{
+    flexDirection:"row",
+    flexWrap:"wrap",
+    justifyContent:"center"
+  },
+
+  button:{
+    backgroundColor:"#ffffff30",
+    padding:10,
+    margin:5,
+    borderRadius:10
+  },
+
+  buttonText:{
+    color:"white"
+  }
 
 });

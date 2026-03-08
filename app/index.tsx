@@ -1,76 +1,33 @@
-import moment from "moment-timezone";
-import { useEffect, useState } from "react";
+import { Link } from "expo-router";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import SkyBackground from "../components/SkyBackground";
 
-type CityKey =
-  | "Jakarta"
-  | "Tokyo"
-  | "London"
-  | "New York"
-  | "Sydney";
-
-const cities: Record<CityKey, string> = {
-  Jakarta: "Asia/Jakarta",
-  Tokyo: "Asia/Tokyo",
-  London: "Europe/London",
-  "New York": "America/New_York",
-  Sydney: "Australia/Sydney",
-};
-
-export default function WorldClock() {
-
-  const [city, setCity] = useState<CityKey>("Jakarta");
-  const [time, setTime] = useState("");
-
-  useEffect(() => {
-
-    const interval = setInterval(() => {
-
-      const tz = cities[city];
-      const t = moment().tz(tz).format("HH:mm:ss");
-
-      setTime(t);
-
-    }, 1000);
-
-    return () => clearInterval(interval);
-
-  }, [city]);
-
-  const hour = moment().tz(cities[city]).hour();
+export default function Home() {
 
   return (
 
-    <SkyBackground hour={hour}>
+    <View style={styles.container}>
 
-      <View style={styles.container}>
+      <Text style={styles.title}>⏱ Time Tools</Text>
 
-        <Text style={styles.title}>🌍 World Clock</Text>
+      <Link href="../(tools)/worldclock" asChild>
+        <Pressable style={styles.button}>
+          <Text style={styles.text}>🌍 World Clock</Text>
+        </Pressable>
+      </Link>
 
-        <Text style={styles.city}>{city}</Text>
+      <Link href="../(tools)/stopwatch" asChild>
+        <Pressable style={styles.button}>
+          <Text style={styles.text}>⏱ Stopwatch</Text>
+        </Pressable>
+      </Link>
 
-        <Text style={styles.time}>{time}</Text>
+      <Link href="../(tools)/alarm" asChild>
+        <Pressable style={styles.button}>
+          <Text style={styles.text}>⏰ Alarm</Text>
+        </Pressable>
+      </Link>
 
-        <View style={styles.buttons}>
-
-          {(Object.keys(cities) as CityKey[]).map((c) => (
-
-            <Pressable
-              key={c}
-              style={styles.button}
-              onPress={() => setCity(c)}
-            >
-              <Text style={styles.buttonText}>{c}</Text>
-            </Pressable>
-
-          ))}
-
-        </View>
-
-      </View>
-
-    </SkyBackground>
+    </View>
 
   );
 
@@ -80,44 +37,30 @@ const styles = StyleSheet.create({
 
   container:{
     flex:1,
+    justifyContent:"center",
     alignItems:"center",
-    justifyContent:"center"
+    backgroundColor:"#0D1B2A"
   },
 
   title:{
-    fontSize:32,
+    fontSize:38,
     color:"white",
     fontWeight:"bold",
-    marginBottom:10
-  },
-
-  city:{
-    fontSize:24,
-    color:"white"
-  },
-
-  time:{
-    fontSize:70,
-    color:"white",
-    fontWeight:"bold",
-    marginVertical:20
-  },
-
-  buttons:{
-    flexDirection:"row",
-    flexWrap:"wrap",
-    justifyContent:"center"
+    marginBottom:40
   },
 
   button:{
-    backgroundColor:"#ffffff30",
-    padding:10,
-    margin:5,
-    borderRadius:10
+    backgroundColor:"#1E88E5",
+    padding:15,
+    borderRadius:12,
+    marginVertical:10,
+    width:220,
+    alignItems:"center"
   },
 
-  buttonText:{
-    color:"white"
+  text:{
+    color:"white",
+    fontSize:18
   }
 
 });
