@@ -19,9 +19,19 @@ export default function WorldClock() {
 
   useEffect(() => {
 
-    const interval = setInterval(() => {
-      setTime(moment().tz(city).format("HH:mm:ss"));
-    }, 1000);
+  const interval = setInterval(() => {
+
+    const zone = moment.tz.zone(city)
+
+    if (zone) {
+      setTime(moment().tz(city).format("HH:mm:ss"))
+    } else {
+      setTime("Invalid Timezone")
+    }
+
+  }, 1000)
+
+  return () => clearInterval(interval)
 
     Animated.loop(
       Animated.timing(cloudX, {
