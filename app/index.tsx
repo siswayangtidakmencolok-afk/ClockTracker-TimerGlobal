@@ -1,25 +1,36 @@
 import moment from "moment-timezone";
 import { useEffect, useState } from "react";
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
+import SkyBackground from "../components/SkyBackground";
+
+type CityKey =
+  | "Jakarta"
+  | "Tokyo"
+  | "London"
+  | "New York"
+  | "Sydney";
+
+const cities: Record<CityKey, string> = {
+  Jakarta: "Asia/Jakarta",
+  Tokyo: "Asia/Tokyo",
+  London: "Europe/London",
+  "New York": "America/New_York",
+  Sydney: "Australia/Sydney",
+};
 
 export default function WorldClock() {
 
-  const [city, setCity] = useState("Asia/Jakarta");
+  const [city, setCity] = useState<CityKey>("Jakarta");
   const [time, setTime] = useState("");
-  const [error, setError] = useState("");
 
   useEffect(() => {
 
     const interval = setInterval(() => {
 
-      const zone = moment.tz.zone(city);
+      const tz = cities[city];
+      const t = moment().tz(tz).format("HH:mm:ss");
 
-      if (zone) {
-        setTime(moment().tz(city).format("HH:mm:ss"));
-        setError("");
-      } else {
-        setError("Timezone tidak ditemukan");
-      }
+      setTime(t);
 
     }, 1000);
 
@@ -27,68 +38,86 @@ export default function WorldClock() {
 
   }, [city]);
 
+  const hour = moment().tz(cities[city]).hour();
+
   return (
 
-    <View style={styles.container}>
+    <SkyBackground hour={hour}>
 
-      <Text style={styles.title}>🌍 World Clock</Text>
+      <View style={styles.container}>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Contoh: Asia/Jakarta"
-        placeholderTextColor="#888"
-        value={city}
-        onChangeText={setCity}
-      />
+        <Text style={styles.title}>🌍 World Clock</Text>
 
-      {error ? (
-        <Text style={styles.error}>{error}</Text>
-      ) : (
+        <Text style={styles.city}>{city}</Text>
+
         <Text style={styles.time}>{time}</Text>
-      )}
 
-    </View>
+        <View style={styles.buttons}>
+
+          {(Object.keys(cities) as CityKey[]).map((c) => (
+
+            <Pressable
+              key={c}
+              style={styles.button}
+              onPress={() => setCity(c)}
+            >
+              <Text style={styles.buttonText}>{c}</Text>
+            </Pressable>
+
+          ))}
+
+        </View>
+
+      </View>
+
+    </SkyBackground>
 
   );
+
 }
 
 const styles = StyleSheet.create({
 
-  container: {
-    flex: 1,
-    paddingTop: 100,
-    alignItems: "center",
-    backgroundColor: "#0D1B2A"
+  container:{
+    flex:1,
+    alignItems:"center",
+    justifyContent:"center"
   },
 
-  title: {
-    fontSize: 30,
-    color: "white",
-    marginBottom: 30,
-    fontWeight: "bold"
+  title:{
+    fontSize:32,
+    color:"white",
+    fontWeight:"bold",
+    marginBottom:10
   },
 
-  input: {
-    borderWidth: 1,
-    borderColor: "#fff",
-    padding: 12,
-    width: 220,
-    marginBottom: 20,
-    borderRadius: 10,
-    color: "white",
-    textAlign: "center"
+  city:{
+    fontSize:24,
+    color:"white"
   },
 
-  time: {
-    fontSize: 60,
-    color: "#00E5FF",
-    fontWeight: "bold",
-    letterSpacing: 3
+  time:{
+    fontSize:70,
+    color:"white",
+    fontWeight:"bold",
+    marginVertical:20
   },
 
-  error: {
-    color: "red",
-    marginTop: 10
+  buttons:{
+    flexDirection:"row",
+    flexWrap:"wrap",
+    justifyContent:"center"
+  },
+
+  button:{
+    backgroundColor:"#ffffff30",
+    padding:10,
+    margin:5,
+    borderRadius:10
+  },
+
+  buttonText:{
+    color:"white"
   }
 
 });

@@ -1,62 +1,34 @@
-import { View, StyleSheet, Animated } from "react-native";
-import { useEffect, useRef } from "react";
+import { View, StyleSheet } from "react-native";
+import Cloud from "./Cloud";
 
-export default function SkyBackground({type}:{type:string}){
+type Props = {
+  hour:number
+  children:any
+}
 
-const cloudMove = useRef(new Animated.Value(0)).current
+export default function SkyBackground({hour,children}:Props){
 
-useEffect(()=>{
+let color="#0D1B2A"
 
-Animated.loop(
-Animated.timing(cloudMove,{
-toValue:1,
-duration:20000,
-useNativeDriver:true
-})
-).start()
-
-},[])
-
-const translate = cloudMove.interpolate({
-inputRange:[0,1],
-outputRange:[-200,200]
-})
+if(hour>=5 && hour<11) color="#87CEEB"
+else if(hour>=11 && hour<17) color="#4FC3F7"
+else if(hour>=17 && hour<19) color="#FF8A65"
 
 return(
 
-<View style={[
-styles.sky,
-type==="night" && {backgroundColor:"#020617"},
-type==="morning" && {backgroundColor:"#87CEEB"},
-type==="evening" && {backgroundColor:"#f97316"}
-]}>
-
-<Animated.View
-style={[
-styles.cloud,
-{transform:[{translateX:translate}]}
-]}
-/>
-
+<View style={[styles.container,{backgroundColor:color}]}>
+<Cloud/>
+{children}
 </View>
 
 )
 
 }
 
-const styles = StyleSheet.create({
+const styles=StyleSheet.create({
 
-sky:{
-...StyleSheet.absoluteFillObject
-},
-
-cloud:{
-position:"absolute",
-width:200,
-height:80,
-backgroundColor:"rgba(255,255,255,0.4)",
-borderRadius:50,
-top:100
+container:{
+flex:1
 }
 
 })
