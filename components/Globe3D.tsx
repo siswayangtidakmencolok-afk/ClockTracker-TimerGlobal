@@ -1,36 +1,25 @@
-import React from "react";
-import { Canvas } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
+import { View, Text, StyleSheet } from "react-native";
 
-function Earth(){
+export default function Globe3D() {
 
-return(
+  return (
 
-mesh>
-<sphereGeometry args={[2,32,32]} />
-<meshStandardMaterial color="blue" />
-</mesh>
+    <View style={styles.container}>
+      <Text style={styles.globe}>🌍</Text>
+    </View>
 
-)
+  );
 
 }
 
-export default function Globe3D(){
+const styles = StyleSheet.create({
 
-return(
+  container:{
+    alignItems:"center"
+  },
 
-Canvas style={{height:300}}>
+  globe:{
+    fontSize:120
+  }
 
-ambientLight intensity={0.5} />
-
-pointLight position={[10,10,10]} />
-
-Earth/>
-
-OrbitControls/>
-
-</Canvas>
-
-)
-
-}
+});
