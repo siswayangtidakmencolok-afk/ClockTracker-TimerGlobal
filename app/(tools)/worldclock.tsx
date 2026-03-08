@@ -1,7 +1,7 @@
 import moment from "moment-timezone";
 import { useEffect, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import SkyBackground from "../components/SkyBackground";
+import SkyBackground from "../../components/SkyBackground";
 
 type CityKey =
   | "Jakarta"
@@ -28,9 +28,9 @@ export default function WorldClock() {
     const interval = setInterval(() => {
 
       const tz = cities[city];
-      const t = moment().tz(tz).format("HH:mm:ss");
+      const currentTime = moment().tz(tz).format("HH:mm:ss");
 
-      setTime(t);
+      setTime(currentTime);
 
     }, 1000);
 
@@ -52,16 +52,19 @@ export default function WorldClock() {
 
         <Text style={styles.time}>{time}</Text>
 
-        <View style={styles.buttons}>
+        <View style={styles.cityContainer}>
 
           {(Object.keys(cities) as CityKey[]).map((c) => (
 
             <Pressable
               key={c}
-              style={styles.button}
+              style={[
+                styles.cityButton,
+                city === c && styles.activeCity
+              ]}
               onPress={() => setCity(c)}
             >
-              <Text style={styles.buttonText}>{c}</Text>
+              <Text style={styles.cityText}>{c}</Text>
             </Pressable>
 
           ))}
@@ -73,51 +76,55 @@ export default function WorldClock() {
     </SkyBackground>
 
   );
-
 }
 
 const styles = StyleSheet.create({
 
-  container:{
-    flex:1,
-    alignItems:"center",
-    justifyContent:"center"
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 
-  title:{
-    fontSize:32,
-    color:"white",
-    fontWeight:"bold",
-    marginBottom:10
+  title: {
+    fontSize: 34,
+    fontWeight: "bold",
+    color: "white",
+    marginBottom: 10,
   },
 
-  city:{
-    fontSize:24,
-    color:"white"
+  city: {
+    fontSize: 22,
+    color: "white",
   },
 
-  time:{
-    fontSize:70,
-    color:"white",
-    fontWeight:"bold",
-    marginVertical:20
+  time: {
+    fontSize: 72,
+    fontWeight: "bold",
+    color: "white",
+    marginVertical: 20,
   },
 
-  buttons:{
-    flexDirection:"row",
-    flexWrap:"wrap",
-    justifyContent:"center"
+  cityContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
   },
 
-  button:{
-    backgroundColor:"#ffffff30",
-    padding:10,
-    margin:5,
-    borderRadius:10
+  cityButton: {
+    backgroundColor: "#ffffff30",
+    padding: 10,
+    margin: 6,
+    borderRadius: 10,
   },
 
-  buttonText:{
-    color:"white"
-  }
+  activeCity: {
+    backgroundColor: "#1E88E5",
+  },
+
+  cityText: {
+    color: "white",
+    fontSize: 14,
+  },
 
 });
