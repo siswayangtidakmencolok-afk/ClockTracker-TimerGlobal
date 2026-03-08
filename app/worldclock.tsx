@@ -1,14 +1,14 @@
+import { Ionicons } from "@expo/vector-icons";
 import moment from "moment-timezone";
 import { useEffect, useRef, useState } from "react";
 import {
+  Animated,
   StyleSheet,
   Text,
   TextInput,
   View,
-  Animated,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import Globe3D from "../../components/Globe3D";
+import Globe3D from "../components/Globe3D";
 
 export default function WorldClock() {
 
