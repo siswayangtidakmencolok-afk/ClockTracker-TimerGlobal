@@ -1,37 +1,17 @@
-import { useEffect, useRef } from "react";
-import { Animated } from "react-native";
+export default function Clouds(){
 
-export default function Cloud(){
+  return(
 
-const x=useRef(new Animated.Value(-200)).current
+  <div style={{
+    position:"absolute",
+    top:0,
+    left:0,
+    width:"100%",
+    height:"200px",
+    background:"url('https://i.imgur.com/c7q3B9B.png') repeat-x",
+    animation:"cloudmove 60s linear infinite",
+    opacity:0.4
+  }} />
 
-useEffect(()=>{
-
-Animated.loop(
-
-Animated.timing(x,{
-toValue:500,
-duration:20000,
-useNativeDriver:true
-})
-
-).start()
-
-},[])
-
-return(
-
-<Animated.Text
-style={{
-position:"absolute",
-top:120,
-fontSize:60,
-transform:[{translateX:x}]
-}}
->
-☁️
-</Animated.Text>
-
-)
-
+  )
 }

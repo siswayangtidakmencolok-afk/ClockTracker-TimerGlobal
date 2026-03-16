@@ -1,34 +1,54 @@
-import { Ionicons } from "@expo/vector-icons";
-import { Tabs } from "expo-router";
+/**
+ * TARUH DI: app/(tabs)/_layout.tsx
+ */
 
-export default function TabsLayout() {
+import { Tabs } from "expo-router";
+import { Text } from "react-native";
+
+function Icon({ emoji, active }: { emoji: string; active: boolean }) {
+  return <Text style={{ fontSize: 18, opacity: active ? 1 : 0.45 }}>{emoji}</Text>;
+}
+
+export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        headerShown: false,
         tabBarStyle: {
-          backgroundColor: "#000",
+          backgroundColor: "#0a0f1a",
+          borderTopColor: "#1e293b",
+          borderTopWidth: 1,
+          height: 60,
+          paddingBottom: 8,
         },
-        tabBarActiveTintColor: "#22c55e",
+        tabBarActiveTintColor: "#1E88E5",
+        tabBarInactiveTintColor: "#475569",
+        headerStyle: { backgroundColor: "#0a0f1a" },
+        headerTintColor: "#94a3b8",
+        headerTitleStyle: { fontWeight: "700", letterSpacing: 1 },
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
-          title: "World Clock",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="time-outline" size={size} color={color} />
-          ),
+          title: "Home",
+          tabBarLabel: "Home",
+          tabBarIcon: ({ focused }) => <Icon emoji="⏱" active={focused} />,
         }}
       />
-
       <Tabs.Screen
         name="explore"
         options={{
-          title: "Stopwatch",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="stopwatch-outline" size={size} color={color} />
-          ),
+          title: "Explore",
+          tabBarLabel: "Explore",
+          tabBarIcon: ({ focused }) => <Icon emoji="🌍" active={focused} />,
+        }}
+      />
+      <Tabs.Screen
+        name="about"
+        options={{
+          title: "About",
+          tabBarLabel: "About",
+          tabBarIcon: ({ focused }) => <Icon emoji="👤" active={focused} />,
         }}
       />
     </Tabs>
