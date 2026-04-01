@@ -52,6 +52,7 @@ onChangeText={setSearch}
 
 <FlatList
 data={filteredCities}
+extraData={time}
 keyExtractor={(item)=>item.city}
 renderItem={({item})=>(
 

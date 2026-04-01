@@ -77,7 +77,7 @@ export default function WorldClock() {
       <Text style={styles.sectionLabel}>SEMUA ZONA WAKTU</Text>
       <View style={styles.allCitiesGrid}>
         {(Object.keys(CITIES) as CityKey[]).map((c) => {
-          const cTime = moment().tz(CITIES[c]).format("HH:mm");
+          const cTime = moment().tz(CITIES[c]).format("HH:mm:ss");
           const cHour = moment().tz(CITIES[c]).hour();
           const cIsDay = cHour >= 6 && cHour < 18;
           const isActive = city === c;

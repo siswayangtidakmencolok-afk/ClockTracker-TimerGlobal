@@ -7,7 +7,7 @@
 
 import * as Linking from "expo-linking";
 import { Link } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Image,
   ScrollView,
@@ -51,6 +51,22 @@ const PROJECTS = [
 
 export default function Home() {
   const [imgError, setImgError] = useState(false);
+  const [time, setTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTime(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const timeStr = time.toLocaleTimeString("en-GB", { hour12: false });
+  const dateStr = time.toLocaleDateString("en-GB", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
 
   return (
     <ScrollView style={styles.root} contentContainerStyle={styles.content}>
@@ -58,8 +74,8 @@ export default function Home() {
       {/* ── Brand Header ── */}
       <View style={styles.headerBlock}>
         <Text style={styles.brand}>FhazTech</Text>
-        <Text style={styles.title}>⏱ Time Tools</Text>
-        <Text style={styles.subtitle}>Pilih alat waktu</Text>
+        <Text style={styles.title}>⏱ {timeStr}</Text>
+        <Text style={styles.subtitle}>{dateStr}</Text>
       </View>
 
       {/* ── Tool Cards ── */}
